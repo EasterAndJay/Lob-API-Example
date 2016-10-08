@@ -1,10 +1,15 @@
 import axios from 'axios';
 
+export const FETCH_REP_DATA = "FETCH_REP_DATA";
 
-// export function fetchData() {
-//   const request = axios.get(createProductsURL());
-//   return {
-//     type: FETCH_DATA,
-//     payload: request
-//   };
-// }
+import {LOB_API_KEY} from '../constants/api_info';
+
+import {constructGoogleCivicApiUrl} from '../helpers/google_civic_url';
+
+export function fetchRepresentativeData(addressData) {
+  const request = axios.get(constructGoogleCivicApiUrl(addressData));
+  return {
+    type: FETCH_REP_DATA,
+    payload: request
+  };
+}
