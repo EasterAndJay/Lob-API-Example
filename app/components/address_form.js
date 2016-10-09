@@ -1,14 +1,26 @@
-import React, {Component} from 'react';
-import {Field} from "./field";
-import {fields} from "../constants/fields";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
 
-export default class AddressForm extends Component {
+import {
+  extractUserAddress,
+  extractToAddress,
+  extractFromAddress
+} from "../helpers/address_helpers";
+import { fields, initialAddressFormState } from "../constants/fields";
+
+import {
+  fetchRepresentativeData,
+  postLetterToLob,
+  updateResponseError
+} from "../actions/index";
+
+import { Field } from "./field";
+
+class AddressForm extends Component {
   constructor(props) {
     super(props);
-    const initialAddressValues = fields.reduce((prev, current) => {
-      return {...prev, [current.name]: "" }
-    }, {});
-    this.state = {...initialAddressValues, message: ""};
+    this.state = initialAddressFormState;
   }
 
   renderFields() {
@@ -24,7 +36,32 @@ export default class AddressForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log("Submitted");
+    const userAddressArray = extractUserAddress(this.state)
+    // Get request to Google API
+    this.props.fetchRepresentativeData(userAddressArray)
+    // Then post request to Lob API with Google response
+    .then((response) => {
+      //post to lob
+      if(response.payload.status < 400){
+        // Remove error if one exists from previous request
+        this.props.updateResponseError(null);
+
+        const toAddress = extractToAddress(response.payload);
+        const fromAddress = extractFromAddress(this.state);
+        const html = `<p>${this.state.message}</p>`
+
+        this.props.postLetterToLob(toAddress, fromAddress, html);
+      }
+      else {
+        throw new Error(
+          "Google API Error: Check the validity of the entered address."
+        );
+      }
+    })
+    .catch((error) => {
+      // Handle error from Lob request
+      this.props.updateResponseError(error)
+    });
   }
 
   render() {
@@ -40,8 +77,11 @@ export default class AddressForm extends Component {
           value={this.state.message}
           onChange={(e) => this.setState({message: e.target.value})}>
         </textarea>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={!this.state.message}>Submit</button>
       </form>
     );
   }
 }
+
+
+export default connect(null, {updateResponseError, fetchRepresentativeData, postLetterToLob})(AddressForm);

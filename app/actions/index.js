@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 export const FETCH_REP_DATA = "FETCH_REP_DATA";
+export const POST_LOB_LETTER = "POST_LOB_LETTER";
+export const UPDATE_RESPONSE_ERROR = "UPDATE_RESPONSE_ERROR";
 
 import {LOB_API_KEY, LOB_LETTERS_ENDPOINT} from '../constants/api_info';
 
@@ -14,7 +16,7 @@ export function fetchRepresentativeData(addressData) {
   };
 }
 
-export function postLetterToLob(toAddress, fromAddress, file) {
+export function postLetterToLob(toAddress, fromAddress, html) {
   const request = axios({
     method:'post',
     url: LOB_LETTERS_ENDPOINT,
@@ -25,11 +27,18 @@ export function postLetterToLob(toAddress, fromAddress, file) {
       to: toAddress,
       from: fromAddress,
       color: false,
-      file: "<p> Hi!</p>"
+      file: html
     }
   });
   return {
     type: POST_LOB_LETTER,
     payload: request
+  };
+}
+
+export function updateResponseError(error) {
+  return {
+    type: UPDATE_RESPONSE_ERROR,
+    payload: error
   };
 }

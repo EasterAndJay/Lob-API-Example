@@ -1,38 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchRepresentativeData } from '../actions/index';
 import AddressForm from "../components/address_form";
 
 import "../assets/stylesheets/app.scss";
-import * as Test from "../constants/test_data";
 class App extends Component {
-  // Initialize and fetch data from rails server
+
   constructor(props) {
     super(props);
-    // props.fetchRepresentativeData(Test.myHomeAddressData);
-    props.fetchRepresentativeData(Test.nonexistentAddressData);
   }
 
-  componentWillReceiveProps(props) {
-    if (props.response.data) {
-      const {repData} = props.response.data.officials[0];
-      const {address} = repData.address[0]
-      toAddress = {
-        name: repData.name,
-        address_line1: address.line1,
-        address_line2: address.line2,
-        address_city: address.city,
-        address_state: address.state,
-        address_zip: address.zip,
-        address_country: 'US'
-      }
+  renderResponseErrors() {
+    if(this.props.responseError){
+      return `${this.props.responseError}`;
     }
   }
 
-  renderResponseError() {
-    const {response} = this.props;
-    if(response && !response.data){
-      return `Error from Google API: ${response}`;
+  renderLinkToLetter() {
+    if (this.props.lobResponse) {
+      return <a className="letter"
+                href={this.props.lobResponse.data.url}
+              >
+                Link to your letter
+              </a>
     }
   }
 
@@ -42,7 +31,8 @@ class App extends Component {
       <div>
         <div className="row">
           <h1 className="text-center page-header"> Lob API Example </h1>
-          <p>{this.renderResponseError()}</p>
+          <p className="error">{this.renderResponseErrors()}</p>
+          {this.renderLinkToLetter()}
         </div>
         <AddressForm />
       </div>
@@ -52,9 +42,10 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    response: state.apiData.response   
+    lobResponse: state.apiData.lobResponse,
+    responseError: state.apiData.responseError
   };
 }
 
 // Connect react component to redux store
-export default connect(mapStateToProps, {fetchRepresentativeData})(App);
+export default connect(mapStateToProps, null)(App);
