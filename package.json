@@ -9,6 +9,10 @@
     "build": "rimraf dist && node_modules/.bin/webpack --config ./webpack.production.config.js --progress --profile --colors",
     "eslint": "eslint ."
   },
+  "engines": {
+    "node": "6.2.2",
+    "npm": "3.9.5"
+  },
   "dependencies": {
     "webpack": "^1.13.0",
     "axios": "^0.13.0",
@@ -22,10 +26,7 @@
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
     "redux-form": "^5.3.1",
-    "redux-promise": "^0.5.3"
-  },
-  "devDependencies": {
-    "autoprefixer": "^6.3.6",
+    "redux-promise": "^0.5.3",
     "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.4",
@@ -34,10 +35,13 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "css-loader": "^0.23.1",
+    "html-webpack-plugin": "^2.16.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.3.6",
     "eslint": "^2.9.0",
     "eslint-plugin-react": "^5.0.1",
     "extract-text-webpack-plugin": "^1.0.1",
-    "html-webpack-plugin": "^2.16.1",
     "json-loader": "^0.5.4",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
