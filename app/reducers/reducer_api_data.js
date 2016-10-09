@@ -15,7 +15,11 @@ export default function(state = INITIAL_STATE, action) {
   case FETCH_REP_DATA:
     return {...state, googleResponse: action.payload};
   case POST_LOB_LETTER:
-    return {...state, lobResponse: action.payload};
+    if(action.payload.data) {
+      return {...state, lobResponse: action.payload};
+    } else {
+      return{...state, responseError: `From Lob API --> ${action.payload}`};
+    }
   case UPDATE_RESPONSE_ERROR:
     return {...state, responseError: action.payload};
   default:

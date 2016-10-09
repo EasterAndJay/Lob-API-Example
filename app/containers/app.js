@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AddressForm from "../components/address_form";
+import {updateResponseError} from "../actions/index";
 
 import "../assets/stylesheets/app.scss";
 class App extends Component {
@@ -16,7 +17,7 @@ class App extends Component {
   }
 
   renderLinkToLetter() {
-    if (this.props.lobResponse) {
+    if (this.props.lobResponse && this.props.lobResponse.data) {
       return <a className="letter"
                 href={this.props.lobResponse.data.url}
               >
@@ -48,4 +49,4 @@ function mapStateToProps(state) {
 }
 
 // Connect react component to redux store
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, {updateResponseError})(App);

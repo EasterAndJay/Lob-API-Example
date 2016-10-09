@@ -7,6 +7,7 @@ import {
   extractToAddress,
   extractFromAddress
 } from "../helpers/address_helpers";
+import { buildLetterHTML } from "../helpers/build_html";
 import { fields, initialAddressFormState } from "../constants/fields";
 
 import {
@@ -48,7 +49,7 @@ class AddressForm extends Component {
 
         const toAddress = extractToAddress(response.payload);
         const fromAddress = extractFromAddress(this.state);
-        const html = `<p>${this.state.message}</p>`
+        const html = buildLetterHTML(this.state.message);
 
         this.props.postLetterToLob(toAddress, fromAddress, html);
       }
