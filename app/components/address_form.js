@@ -7,6 +7,7 @@ import {
   extractToAddress,
   extractFromAddress
 } from "../helpers/address_helpers";
+
 import { buildLetterHTML } from "../helpers/build_html";
 import { fields, initialAddressFormState } from "../constants/fields";
 
@@ -24,6 +25,7 @@ class AddressForm extends Component {
     this.state = initialAddressFormState;
   }
 
+  // Render form fields using field component
   renderFields() {
     return fields.map((field) => {
       return <Field
@@ -35,6 +37,9 @@ class AddressForm extends Component {
     });
   }
 
+  // Submit requests sequentially.
+  // Uses promise structure on aynschronous action creators to
+  // simulate synchronous code.
   onSubmit(e) {
     e.preventDefault();
     const userAddressArray = extractUserAddress(this.state)
@@ -85,4 +90,8 @@ class AddressForm extends Component {
 }
 
 
-export default connect(null, {updateResponseError, fetchRepresentativeData, postLetterToLob})(AddressForm);
+export default connect(null, {
+  updateResponseError,
+  fetchRepresentativeData,
+  postLetterToLob
+})(AddressForm);

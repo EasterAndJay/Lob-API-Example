@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AddressForm from "../components/address_form";
+import Header from "./header";
 import {updateResponseError} from "../actions/index";
 
 import "../assets/stylesheets/app.scss";
@@ -10,31 +11,24 @@ class App extends Component {
     super(props);
   }
 
-  renderResponseErrors() {
-    if(this.props.responseError){
-      return `${this.props.responseError}`;
-    }
-  }
-
   renderLinkToLetter() {
     if (this.props.lobResponse && this.props.lobResponse.data) {
-      return <a className="letter"
-                href={this.props.lobResponse.data.url}
-              >
-                Link to your letter
-              </a>
+      return(
+        <a
+          className="letter"
+          href={this.props.lobResponse.data.url}
+        >
+          Link to your letter
+        </a>
+      );
     }
   }
 
   render() {
-
     return (
       <div>
-        <div className="row">
-          <h1 className="text-center page-header"> Lob API Example </h1>
-          <p className="error">{this.renderResponseErrors()}</p>
-          {this.renderLinkToLetter()}
-        </div>
+        <Header />
+        {this.renderLinkToLetter()}
         <AddressForm />
       </div>
     );
@@ -44,9 +38,8 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     lobResponse: state.apiData.lobResponse,
-    responseError: state.apiData.responseError
   };
 }
 
 // Connect react component to redux store
-export default connect(mapStateToProps, {updateResponseError})(App);
+export default connect(mapStateToProps, null)(App);

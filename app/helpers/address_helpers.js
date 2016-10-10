@@ -1,3 +1,5 @@
+// Helper functions to define address structure of requests
+
 export function extractUserAddress(addressFormState){
   return Object.keys(addressFormState).map((key) => {
     if(key != 'message' && key != "name") {
